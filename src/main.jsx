@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Profile from "./pages/Profile.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ErrorPage from "./components/ErrorPage.jsx";
+import UserAllBlogs from "./pages/UserAllBlogs.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -22,8 +23,12 @@ createRoot(document.getElementById("root")).render(
             element={<ProtectedRoute children={<Dashboard />} />}
           />
           <Route
-            path="Profile"
+            path="profile"
             element={<ProtectedRoute children={<Profile />} />}
+          />
+          <Route
+            path="user/:id"
+            element={<ProtectedRoute children={<UserAllBlogs />} />}
           />
         </Route>
         <Route path="login" element={<Login />} />

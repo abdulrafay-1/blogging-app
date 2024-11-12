@@ -10,13 +10,12 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     useUser().then((user) => {
       if (user) {
-        console.log(user);
         setLoggedUser(user);
       } else {
         navigate("/login");
       }
     });
-  }, [loggedUser]);
+  }, []);
 
   return loggedUser && children;
 };

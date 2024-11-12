@@ -5,10 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import eyeHide from "/eye-off.svg";
 import eyeShow from "/eye-show.svg";
 import { doc, setDoc } from "firebase/firestore";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [error, setError] = useState(false);
   const [passShown, setIsPassShown] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fullName = useRef();
   const email = useRef();
@@ -34,6 +37,7 @@ const Register = () => {
       setError("Full name should be greater than 3 letters");
       return;
     }
+    setLoading(true);
     createUserWithEmailAndPassword(
       auth,
       email.current.value,
@@ -41,27 +45,43 @@ const Register = () => {
     )
       .then((userCredential) => {
         // Signed up
+        toast.success("Sigup successfull !");
         const user = userCredential.user;
-        setDoc(doc(db, "users", user.uid), {
+        let userObj = {
           email: email.current.value,
           password: password.current.value,
           fullName: fullName.current.value,
           uid: user.uid,
+        };
+        localStorage.setItem(
+          "loggedUser",
+          JSON.stringify({ ...user, ...userObj })
+        );
+        setDoc(doc(db, "users", user.uid), userObj).then(() => {
+          navigate("/");
         });
-
-        localStorage.setItem("loggedUser", JSON.stringify(user));
-        console.log(user);
-        navigate("/");
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
         setError(errorCode);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
       <header className="p-3 text-white flex justify-between items-center bg-primary">
         <h2 className="font-medium text-xl">Personal Blogging App</h2>
         <Link to="/login">
@@ -98,7 +118,7 @@ const Register = () => {
                   alt="eyeshow"
                   width={28}
                   height={28}
-                  className="absolute right-2 top-1 cursor-pointer"
+                  className="absolute right-2 top-2 cursor-pointer"
                   onClick={() => setIsPassShown(!passShown)}
                 />
                 <input
@@ -112,7 +132,8 @@ const Register = () => {
               {error && <p className="text-red-500">{error}</p>}
               <button
                 type="submit"
-                className="border p-2 rounded-md border-gray-300 bg-primary text-white active:translate-y-0.5"
+                disabled={loading}
+                className="border p-2 disabled:opacity-50 rounded-md border-gray-300 bg-primary text-white active:translate-y-0.5"
               >
                 Submit
               </button>
