@@ -90,19 +90,21 @@ const Navbar = () => {
             <p className=" md:block hidden md:text-sm  uppercase">
               {`Welcome ${user.fullName.toUpperCase()} !`}
             </p>
-            <Link to="/profile">
-              <img
-                width="40px"
-                height="40px"
-                className="rounded-full"
-                src={
-                  user.profile
-                    ? user.profile
-                    : "https://wallpapers.com/images/hd/user-profile-placeholder-icon-jiv4adftoq5dhj54.jpg"
-                }
-                alt="profile"
-              />
-            </Link>
+            <div className="w-[40px] h-[40px] object-cover rounded-full overflow-hidden">
+              <Link to="/profile">
+                <img
+                  width="100%"
+                  height="100%"
+                  className="object-cover"
+                  src={
+                    user.profile
+                      ? user.profile
+                      : "https://wallpapers.com/images/hd/user-profile-placeholder-icon-jiv4adftoq5dhj54.jpg"
+                  }
+                  alt="profile"
+                />
+              </Link>
+            </div>
 
             <p
               onClick={logout}
