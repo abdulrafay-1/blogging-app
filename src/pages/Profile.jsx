@@ -1,13 +1,20 @@
 import { updatePassword } from "firebase/auth";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { auth } from "../config/firebase";
 import MyToastContainer from "../components/MyToastContainer";
 
 const Profile = () => {
+  const [loggedUser, setLoggedUser] = useState(null);
   const password = useRef();
   const confirmPassword = useRef();
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("loggedUser"));
+    setLoggedUser(user);
+    console.log(user);
+  }, []);
 
   const updatePass = (e) => {
     e.preventDefault();
@@ -44,7 +51,22 @@ const Profile = () => {
       <h1 className="ml-2 py-4 bg-white font-medium text-2xl">Profile</h1>
       <div className="flex my-2 justify-center mt-4">
         <div className="border w-full md:w-[680px] bg-white border-gray-300 rounded-md shadow-lg p-4">
-          <h2 className="text-xl font-medium mb-4">Rafay</h2>
+          {loggedUser && (
+            <>
+              <h2 className="text-xl font-medium mb-4">
+                {loggedUser.fullName.toUpperCase()}
+              </h2>
+              <img
+                width="100px"
+                className="rounded-md"
+                src={
+                  loggedUser.profile ||
+                  "https://wallpapers.com/images/hd/user-profile-placeholder-icon-jiv4adftoq5dhj54.jpg"
+                }
+                alt="profile"
+              />
+            </>
+          )}
           <h3 className="text-lg font-medium mb-2">Change Password :</h3>
           <div className="flex flex-col">
             <form onSubmit={(e) => updatePass(e)}>

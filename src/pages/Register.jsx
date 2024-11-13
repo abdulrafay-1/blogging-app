@@ -39,7 +39,7 @@ const Register = () => {
       setError("Full name should be greater than 3 letters");
       return;
     }
-    let profileUrl;
+    setLoading(true);
     uploadFile(profile.current.files[0])
       .then((res) => {
         createUserWithEmailAndPassword(
@@ -73,8 +73,6 @@ const Register = () => {
           .finally(() => setLoading(false));
       })
       .catch((err) => console.log(err));
-
-    // setLoading(true);
   };
 
   return (

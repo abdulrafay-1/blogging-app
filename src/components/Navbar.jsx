@@ -2,9 +2,7 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import useUser from "../hooks/useUser";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { auth, db } from "../config/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import getUserDocs from "../utils/getUserDocs";
+import { auth } from "../config/firebase";
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -82,6 +80,13 @@ const Navbar = () => {
                 >
                   Profile
                 </Link>
+                <Link
+                  to="/register"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Register
+                </Link>
               </div>
             </div>
             <p className=" md:block hidden md:text-sm  uppercase">
@@ -92,7 +97,11 @@ const Navbar = () => {
                 width="40px"
                 height="40px"
                 className="rounded-full"
-                src={user.profile}
+                src={
+                  user.profile
+                    ? user.profile
+                    : "https://wallpapers.com/images/hd/user-profile-placeholder-icon-jiv4adftoq5dhj54.jpg"
+                }
                 alt="profile"
               />
             </Link>

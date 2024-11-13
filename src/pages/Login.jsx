@@ -28,28 +28,51 @@ const Login = () => {
       setError("password should contains 6 characters");
       return;
     }
-    try {
-      setLoading(true);
-      setError(false);
-      const { user } = await signInWithEmailAndPassword(
-        auth,
-        email.current.value,
-        password.current.value
-      );
-      toast.success("Login Successfull");
-      const res = await getUserDocs("users", user.uid, "uid");
-      console.log(res);
-      localStorage.setItem(
-        "loggedUser",
-        JSON.stringify({ ...user, ...res[0] })
-      );
-      navigate("/");
-    } catch (error) {
-      setError(error.code);
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    signInWithEmailAndPassword(
+      auth,
+      email.current.value,
+      password.current.value
+    )
+      .then(({ user }) => {
+        toast.success("Login successfull !");
+        getUserDocs("users", user.uid, "uid")
+          .then((res) => {
+            localStorage.setItem(
+              "loggedUser",
+              JSON.stringify({ ...user, ...res[0] })
+            );
+          })
+          .then(() => navigate("/"));
+      })
+      .catch((err) => {
+        setError(err.code);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    // try {
+    //   setLoading(true);
+    //   setError(false);
+    //   const { user } = await signInWithEmailAndPassword(
+    //     auth,
+    //     email.current.value,
+    //     password.current.value
+    //   );
+    //   toast.success("Login Successfull");
+    //   const res = await getUserDocs("users", user.uid, "uid");
+    //   console.log(res);
+    //   localStorage.setItem(
+    //     "loggedUser",
+    //     JSON.stringify({ ...user, ...res[0] })
+    //   );
+    //   navigate("/");
+    // } catch (error) {
+    //   setError(error.code);
+    //   console.log(error);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (

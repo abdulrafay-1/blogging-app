@@ -44,15 +44,18 @@ const UserAllBlogs = () => {
               <h2 className="text-xl font-medium py-3">
                 All from {userBlog[0].fullName}
               </h2>
-              {userBlog.map(({ title, description, time, fullName, docId }) => (
-                <BlogCard
-                  key={docId}
-                  title={title}
-                  description={description}
-                  time={new Date(time).toDateString()}
-                  fullName={fullName}
-                />
-              ))}
+              {userBlog.map(
+                ({ title, description, time, fullName, docId, profile }) => (
+                  <BlogCard
+                    key={docId}
+                    title={title}
+                    description={description}
+                    time={new Date(time).toDateString()}
+                    fullName={fullName}
+                    profile={profile}
+                  />
+                )
+              )}
             </>
           )}
           {error && (
