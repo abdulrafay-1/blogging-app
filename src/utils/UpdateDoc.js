@@ -13,4 +13,4 @@ const updateDocument = (docId, obj) => {
     })
 }
 
-export { updateDocument }
+export default updateDocument 
