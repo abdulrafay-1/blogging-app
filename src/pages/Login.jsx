@@ -4,9 +4,9 @@ import { auth } from "../config/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import eyeHide from "/eye-off.svg";
 import eyeShow from "/eye-show.svg";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import getUserDocs from "../utils/getUserDocs";
+import MyToastContainer from "../components/MyToastContainer";
 
 const Login = () => {
   const [passShown, setIsPassShown] = useState(false);
@@ -18,7 +18,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const loginUser = (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
 
     if ((!email.current.value.trim(), !password.current.value.trim())) {
@@ -28,44 +28,33 @@ const Login = () => {
       setError("password should contains 6 characters");
       return;
     }
-    setLoading(true);
-    signInWithEmailAndPassword(
-      auth,
-      email.current.value,
-      password.current.value
-    )
-      .then((userCredential) => {
-        toast.success("Login Succesfull");
-        const user = userCredential.user;
-        getUserDocs("users", user.uid, "uid").then((res) => {
-          localStorage.setItem(
-            "loggedUser",
-            JSON.stringify({ ...user, ...res[0] })
-          );
-          navigate("/");
-        });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        setError(errorCode);
-      })
-      .finally(() => setLoading(false));
+    try {
+      setLoading(true);
+      setError(false);
+      const { user } = await signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      );
+      toast.success("Login Successfull");
+      const res = await getUserDocs("users", user.uid, "uid");
+      console.log(res);
+      localStorage.setItem(
+        "loggedUser",
+        JSON.stringify({ ...user, ...res[0] })
+      );
+      navigate("/");
+    } catch (error) {
+      setError(error.code);
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        theme="light"
-      />
+      <MyToastContainer />
       <header className="p-3 text-white flex justify-between items-center bg-primary">
         <h2 className="font-medium text-xl">Personal Blogging App</h2>
         <Link to="/register">

@@ -48,13 +48,14 @@ const Home = () => {
         <div className="flex flex-col gap-2 w-full md:w-[580px] my-2">
           {allBlogs.length > 0 &&
             allBlogs.map(
-              ({ title, description, time, fullName, docId, uid }) => (
+              ({ title, description, time, fullName, docId, uid, profile }) => (
                 <BlogCard
                   key={docId}
                   title={title}
                   description={description}
                   time={new Date(time).toDateString()}
                   fullName={fullName}
+                  profile={profile}
                 >
                   <Link to={`/user/${uid}`}>
                     <p className="text-sm text-primary cursor-pointer hover:underline">

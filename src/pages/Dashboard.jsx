@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useUser from "../hooks/useUser";
 import { deleteDoc, doc, getDoc, Timestamp } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 import addDocument from "../utils/addDoc";
 import getUserDocs from "../utils/getUserDocs";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import BlogCard from "../components/BlogCard";
 import myDeleteDoc from "../utils/deleteDoc";
+import MyToastContainer from "../components/MyToastContainer";
 
 const Dashboard = () => {
   const titleInput = useRef();
@@ -19,11 +19,14 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    useUser()
-      .then((res) => {
-        getUserDocs("users", res.uid, "uid").then((res) => setUser(res[0]));
-      })
-      .catch((err) => console.log(err));
+    const storageUser = JSON.parse(localStorage.getItem("loggedUser"));
+    console.log(storageUser);
+    setUser(storageUser);
+    // useUser()
+    //   .then((res) => {
+    //     getUserDocs("users", res.uid, "uid").then((res) => setUser(res[0]));
+    //   })
+    //   .catch((err) => console.log(err));
   }, []);
 
   const publishBlog = (e) => {
@@ -41,6 +44,7 @@ const Dashboard = () => {
       fullName: user.fullName,
       time: new Date().toLocaleString(),
       uid: user.uid,
+      profile: user.profile,
     };
     setRefreshBlogs(refreshBlogs + 1);
     setLoading(true);
@@ -70,25 +74,13 @@ const Dashboard = () => {
   const deleteBlog = (docid) => {
     setRefreshBlogs(refreshBlogs + 1);
     myDeleteDoc("blogs", docid).then((res) => {
-      console.log(res);
       toast.info("Blog deleted");
     });
   };
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover={false}
-        theme="light"
-      />
+      <MyToastContainer />
       <h1 className="py-5 shadow-sm px-2 text-2xl bg-white font-semibold">
         Dashboard
       </h1>
@@ -149,6 +141,7 @@ const Dashboard = () => {
                   description={item.description}
                   time={new Date(item.time).toDateString()}
                   fullName={item.fullName}
+                  profile={item.profile}
                 >
                   <div className="flex text-primary mt-2 gap-2 ">
                     <p

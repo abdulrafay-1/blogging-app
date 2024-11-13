@@ -25,6 +25,7 @@ const Navbar = () => {
 
   const getUserName = () => {
     const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+    console.log(loggedUser);
     setUser(loggedUser);
   };
 
@@ -83,10 +84,17 @@ const Navbar = () => {
                 </Link>
               </div>
             </div>
+            <p className=" md:block hidden md:text-sm  uppercase">
+              {`Welcome ${user.fullName.toUpperCase()} !`}
+            </p>
             <Link to="/profile">
-              <p className="hover:underline text-xs md:text-sm  uppercase">
-                {`Welcome ${user.fullName.toUpperCase()} !`}
-              </p>
+              <img
+                width="40px"
+                height="40px"
+                className="rounded-full"
+                src={user.profile}
+                alt="profile"
+              />
             </Link>
 
             <p

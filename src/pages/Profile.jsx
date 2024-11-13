@@ -1,8 +1,8 @@
 import { updatePassword } from "firebase/auth";
 import React, { useRef, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { auth } from "../config/firebase";
-import useUser from "../hooks/useUser";
+import MyToastContainer from "../components/MyToastContainer";
 
 const Profile = () => {
   const password = useRef();
@@ -24,18 +24,15 @@ const Profile = () => {
       return;
     }
 
-    useUser().then((user) => {
-      console.log(user);
-      updatePassword(auth.currentUser, password.current.value)
-        .then(() => {
-          toast.success("Password updated successfully !");
-          setError(null);
-        })
-        .catch((error) => {
-          console.log(error);
-          setError(error.code);
-        });
-    });
+    updatePassword(auth.currentUser, password.current.value)
+      .then(() => {
+        toast.success("Password updated successfully !");
+        setError(null);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error.code);
+      });
 
     console.log(password.current.value);
     console.log(confirmPassword.current.value);
@@ -43,19 +40,7 @@ const Profile = () => {
 
   return (
     <div>
-      {/* <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover={false}
-        theme="light"
-      />
-      <ToastContainer /> */}
+      <MyToastContainer />
       <h1 className="ml-2 py-4 bg-white font-medium text-2xl">Profile</h1>
       <div className="flex my-2 justify-center mt-4">
         <div className="border w-full md:w-[680px] bg-white border-gray-300 rounded-md shadow-lg p-4">
@@ -82,7 +67,7 @@ const Profile = () => {
               {error && <div className="mb-2 text-red-500">{error}</div>}
               <button
                 type="submit"
-                className="bg-primary px-3 rounded-md hover:bg-[#6b39f5] py-2 text-white"
+                className="bg-primary px-3 rounded-md py-2 text-white"
               >
                 Update password
               </button>
