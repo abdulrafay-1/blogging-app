@@ -50,7 +50,7 @@ const UserAllBlogs = () => {
                     key={docId}
                     title={title}
                     description={description}
-                    time={new Date(time).toDateString()}
+                    time={time}
                     fullName={fullName}
                     profile={profile}
                   />

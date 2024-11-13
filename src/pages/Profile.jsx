@@ -57,7 +57,7 @@ const Profile = () => {
                 {loggedUser.fullName.toUpperCase()}
               </h2>
               <img
-                width="100px"
+                width="200px"
                 className="rounded-md"
                 src={
                   loggedUser.profile ||

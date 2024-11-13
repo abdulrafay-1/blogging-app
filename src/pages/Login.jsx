@@ -79,7 +79,9 @@ const Login = () => {
     <>
       <MyToastContainer />
       <header className="p-3 text-white flex justify-between items-center bg-primary">
-        <h2 className="font-medium text-xl">Personal Blogging App</h2>
+        <Link to="/">
+          <h2 className="font-medium text-xl">Personal Blogging App</h2>
+        </Link>
         <Link to="/register">
           <p className="hover:cursor-pointer hover:underline px-3 py-1 rounded-md">
             Register

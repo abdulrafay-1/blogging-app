@@ -60,7 +60,7 @@ const Dashboard = () => {
       title: titleInput.current.value,
       description: descriptionInput.current.value,
       fullName: user.fullName,
-      time: new Date().toLocaleString(),
+      time: Date.now(),
       uid: user.uid,
       profile: user.profile,
     };
@@ -160,7 +160,7 @@ const Dashboard = () => {
                   key={item.docId}
                   title={item.title}
                   description={item.description}
-                  time={new Date(item.time).toDateString()}
+                  time={item.time}
                   fullName={item.fullName}
                   profile={item.profile}
                 >

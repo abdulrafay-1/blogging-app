@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
-import useUser from "../hooks/useUser";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase";
@@ -90,21 +89,17 @@ const Navbar = () => {
             <p className=" md:block hidden md:text-sm  uppercase">
               {`Welcome ${user.fullName.toUpperCase()} !`}
             </p>
-            <div className="w-[40px] h-[40px] object-cover rounded-full overflow-hidden">
-              <Link to="/profile">
+            <Link to="/profile">
+              <div className="h-[40px] w-[40px] rounded-full overflow-hidden flex items-center justify-center">
                 <img
-                  width="100%"
-                  height="100%"
-                  className="object-cover"
-                  src={
-                    user.profile
-                      ? user.profile
-                      : "https://wallpapers.com/images/hd/user-profile-placeholder-icon-jiv4adftoq5dhj54.jpg"
-                  }
+                  width="40"
+                  height="40"
+                  className="rounded-full object-cover h-full w-full"
+                  src={user.profile}
                   alt="profile"
                 />
-              </Link>
-            </div>
+              </div>
+            </Link>
 
             <p
               onClick={logout}

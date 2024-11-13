@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import getAllDocs from "../utils/getAllDocs";
 import Loader from "../components/Loader";
 import BlogCard from "../components/BlogCard";
 import { Link } from "react-router-dom";
+import { Timestamp } from "firebase/firestore";
 
 const Home = () => {
   const [allBlogs, setAllBlogs] = useState([]);
@@ -41,7 +41,7 @@ const Home = () => {
       )}
       {error && (
         <h2 className="text-red-500 text-xl font-medium underline text-center">
-          error 404 {error}
+          {error}
         </h2>
       )}
       <div className="flex flex-col flex-grow items-center ">
@@ -53,7 +53,7 @@ const Home = () => {
                   key={docId}
                   title={title}
                   description={description}
-                  time={new Date(time).toDateString()}
+                  time={time}
                   fullName={fullName}
                   profile={profile}
                 >
