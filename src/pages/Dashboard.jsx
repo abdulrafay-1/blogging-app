@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import BlogCard from "../components/BlogCard";
 import myDeleteDoc from "../utils/deleteDoc";
 import MyToastContainer from "../components/MyToastContainer";
-import updateDocument from "../utils/updateDoc";
+import updateDocument from "../utils/updateDocument";
 
 const Dashboard = () => {
   const titleInput = useRef();
