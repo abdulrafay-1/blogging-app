@@ -34,9 +34,7 @@ const Navbar = () => {
   return (
     <div className="flex items-center text-white  font-medium  justify-between bg-primary py-3">
       <Link to="/">
-        <h2 className="md:text-2xl text-md md-1 md:ml-2">
-          Personal Blogging App
-        </h2>
+        <h2 className="md:text-2xl text-lg ml-2">Personal Blogging App</h2>
       </Link>
       <div className="flex items-center gap-1 mr-1">
         {user ? (

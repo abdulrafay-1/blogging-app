@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import useUser from "../hooks/useUser";
-import { deleteDoc, doc, getDoc, Timestamp } from "firebase/firestore";
-import { auth, db } from "../config/firebase";
+import { auth } from "../config/firebase";
 import addDocument from "../utils/addDoc";
 import getUserDocs from "../utils/getUserDocs";
 import { toast } from "react-toastify";
 import BlogCard from "../components/BlogCard";
 import myDeleteDoc from "../utils/deleteDoc";
 import MyToastContainer from "../components/MyToastContainer";
+import { updateDocument } from "../utils/updateDoc";
 
 const Dashboard = () => {
   const titleInput = useRef();
   const descriptionInput = useRef();
   const [user, setUser] = useState(null);
   const [userBlogs, setUserBlogs] = useState([]);
+  const [blogDetails, setBlogDetails] = useState(null);
   const [refreshBlogs, setRefreshBlogs] = useState(0);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,11 +22,6 @@ const Dashboard = () => {
     const storageUser = JSON.parse(localStorage.getItem("loggedUser"));
     console.log(storageUser);
     setUser(storageUser);
-    // useUser()
-    //   .then((res) => {
-    //     getUserDocs("users", res.uid, "uid").then((res) => setUser(res[0]));
-    //   })
-    //   .catch((err) => console.log(err));
   }, []);
 
   const publishBlog = (e) => {
@@ -38,6 +33,29 @@ const Dashboard = () => {
       setError("Description should be more than 10 character");
       return;
     }
+    if (blogDetails) {
+      const updateBlogObj = {
+        title: titleInput.current.value,
+        description: descriptionInput.current.value,
+      };
+      setLoading(true);
+      updateDocument(blogDetails.docId, updateBlogObj)
+        .then((res) => {
+          setRefreshBlogs(refreshBlogs + 1);
+          toast.success("Blog Updated");
+          titleInput.current.value = "";
+          descriptionInput.current.value = "";
+          setBlogDetails(null);
+        })
+        .catch((err) => {
+          setError(JSON.stringify(err));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+      return;
+    }
+
     const blogObj = {
       title: titleInput.current.value,
       description: descriptionInput.current.value,
@@ -67,8 +85,11 @@ const Dashboard = () => {
     });
   }, [refreshBlogs]);
 
-  const editBlog = (docid) => {
-    console.log(docid);
+  const editBlog = (blogItem) => {
+    console.log(blogItem);
+    setBlogDetails(blogItem);
+    titleInput.current.value = blogItem.title;
+    descriptionInput.current.value = blogItem.description;
   };
 
   const deleteBlog = (docid) => {
@@ -146,7 +167,7 @@ const Dashboard = () => {
                   <div className="flex text-primary mt-2 gap-2 ">
                     <p
                       className=" hover:underline hover:cursor-pointer text-sm"
-                      onClick={() => editBlog(item.docId)}
+                      onClick={() => editBlog(item)}
                     >
                       Edit
                     </p>
