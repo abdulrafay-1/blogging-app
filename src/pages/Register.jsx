@@ -40,16 +40,17 @@ const Register = () => {
       return;
     }
     setLoading(true);
-    uploadFile(profile.current.files[0])
-      .then((res) => {
-        createUserWithEmailAndPassword(
-          auth,
-          email.current.value,
-          password.current.value
-        )
-          .then((userCredential) => {
-            // Signed up
-            toast.success("Sigup successfull !");
+
+    createUserWithEmailAndPassword(
+      auth,
+      email.current.value,
+      password.current.value
+    )
+      .then((userCredential) => {
+        // Signed up
+        toast.success("Sigup successfull !");
+        uploadFile(profile.current.files[0])
+          .then((res) => {
             const user = userCredential.user;
             let userObj = {
               email: email.current.value,
@@ -66,13 +67,13 @@ const Register = () => {
               navigate("/");
             });
           })
-          .catch((error) => {
-            const errorCode = error.code;
-            setError(errorCode);
-          })
-          .finally(() => setLoading(false));
+          .catch((err) => console.log(err));
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        const errorCode = error.code;
+        setError(errorCode);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
