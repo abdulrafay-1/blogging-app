@@ -39,8 +39,8 @@ const Register = () => {
       setError("Full name should be greater than 3 letters");
       return;
     }
-    setLoading(true);
 
+    setLoading(true);
     createUserWithEmailAndPassword(
       auth,
       email.current.value,
@@ -48,9 +48,9 @@ const Register = () => {
     )
       .then((userCredential) => {
         // Signed up
-        toast.success("Sigup successfull !");
         uploadFile(profile.current.files[0])
           .then((res) => {
+            toast.success("Sigup successfull !");
             const user = userCredential.user;
             let userObj = {
               email: email.current.value,
