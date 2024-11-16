@@ -63,9 +63,11 @@ const Register = () => {
               "loggedUser",
               JSON.stringify({ ...user, ...userObj })
             );
-            setDoc(doc(db, "users", user.uid), userObj).then(() => {
+            setDoc(doc(db, "users", user.uid), userObj)
+              .then(() => {
               navigate("/");
-            });
+            })
+            .finally(() => setLoading(false))
           })
           .catch((err) => console.log(err));
       })
@@ -73,7 +75,7 @@ const Register = () => {
         const errorCode = error.code;
         setError(errorCode);
       })
-      .finally(() => setLoading(false));
+      
   };
 
   return (
