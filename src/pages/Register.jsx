@@ -65,17 +65,16 @@ const Register = () => {
             );
             setDoc(doc(db, "users", user.uid), userObj)
               .then(() => {
-              navigate("/");
-            })
-            .finally(() => setLoading(false))
+                navigate("/");
+              })
+              .finally(() => setLoading(false));
           })
           .catch((err) => console.log(err));
       })
       .catch((error) => {
         const errorCode = error.code;
         setError(errorCode);
-      })
-      
+      });
   };
 
   return (
